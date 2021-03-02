@@ -17,7 +17,7 @@ def pullImages():
         HR_scan_results_file = open("HR_scan_results.out", "w")
         images = file.read().split()
         results = {}
-        for i in range(0,1):
+        for i in range(0,81):
             #pull the image
             cprint("Pulling: " + images[i], 'grey', 'on_blue')
             exit_code = os.system("docker pull " + images[i])
@@ -34,12 +34,12 @@ def pullImages():
             
 
             #remove the image
-            # cprint("Removing: " + images[i], 'grey', 'on_blue')
-            # exit_code = os.system("docker rmi " + images[i] + " -f")
-            # if(exit_code != 0):
-            #     cprint("Failed to remove: " + images[i], 'grey', 'on_red')
-            #     failed_file.write("failed to remove image: " + images[i] + "\n")
-            #     failure = 1
+            cprint("Removing: " + images[i], 'grey', 'on_blue')
+            exit_code = os.system("docker rmi " + images[i] + " -f")
+            if(exit_code != 0):
+                cprint("Failed to remove: " + images[i], 'grey', 'on_red')
+                failed_file.write("failed to remove image: " + images[i] + "\n")
+                failure = 1
             
             # check success
             # if(not failure):
