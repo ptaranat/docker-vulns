@@ -14,5 +14,5 @@ import json
 with open("scan_results.out") as f:
     data = json.load(f)
     # print(json.dumps(data, indent=1))
-    print(json.dumps(data["archlinux"]["matches"]))
+    print(json.dumps(data["archlinux"]["matches"][0]["vulnerability"]["id"]))
 
