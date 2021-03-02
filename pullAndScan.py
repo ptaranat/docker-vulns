@@ -13,12 +13,10 @@ from pprint import pprint
 def pullImages():
         file = open("image_list.txt", "r")
         failed_file = open("failed_images.txt", "w")
-        success_file = open("success_images.txt", "w")
         scan_results_file = open("scan_results.out", "w")
         HR_scan_results_file = open("HR_scan_results.out", "w")
-        failure = 0;
         images = file.read().split()
-
+        results = {}
         for i in range(0,1):
             #pull the image
             cprint("Pulling: " + images[i], 'grey', 'on_blue')
@@ -32,22 +30,24 @@ def pullImages():
             cprint("Scanning: " + images[i], 'grey', 'on_blue')
             data = os.popen(
                 "grype " + images[i] +" -o json").read()
-            image = {images[i]: json.loads(data)}
-            scan_results_file.write(json.dumps(image))
-            HR_scan_results_file.write(json.dumps(data, indent=1))
+            results[images[i]] = json.loads(data)
+            
 
             #remove the image
-            cprint("Removing: " + images[i], 'grey', 'on_blue')
-            exit_code = os.system("docker rmi " + images[i] + " -f")
-            if(exit_code != 0):
-                cprint("Failed to remove: " + images[i], 'grey', 'on_red')
-                failed_file.write("failed to remove image: " + images[i] + "\n")
-                failure = 1
+            # cprint("Removing: " + images[i], 'grey', 'on_blue')
+            # exit_code = os.system("docker rmi " + images[i] + " -f")
+            # if(exit_code != 0):
+            #     cprint("Failed to remove: " + images[i], 'grey', 'on_red')
+            #     failed_file.write("failed to remove image: " + images[i] + "\n")
+            #     failure = 1
             
             # check success
             # if(not failure):
             #     success_file.write("pulled and removed: " + images[i] + "\n")
             # failure = 0
+
+        scan_results_file.write(json.dumps(results))
+        HR_scan_results_file.write(json.dumps(results, indent=1))
         file.close()
         failed_file.close()
         success_file.close()
