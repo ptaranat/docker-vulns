@@ -9,15 +9,21 @@ def findDep(filename):
     image_list = content
     images = []
     cmd = "skopeo inspect docker://docker.io/library/"
+
     for item in image_list:
         image = {}
-        data = json.loads(os.popen(cmd + item).read())
-        image["name"] = item
-        sha = data["Layers"][-1]
-        image["sha256"] = sha
-        image["layers"] = data["Layers"][:-1]
-        image["dependency"] = ""
-        images.append(image)
+        # some images don't have latest tag (elasticsearch)
+        with os.popen(cmd + item) as output:
+            try:
+                data = json.loads(output.read())
+                image["name"] = item
+                sha = data["Layers"][-1]
+                image["sha256"] = sha
+                image["layers"] = data["Layers"][:-1]
+                image["dependency"] = ""
+                images.append(image)
+            except:
+                pass
 
     for base in images:
         for item in images:
@@ -33,8 +39,8 @@ def findDep(filename):
         dep = item["dependency"]
         if dep:
             item_name = item["name"]
-            print(f"{item_name} depends on {dep}")
+            print(f"{item_name} dependson {dep}")
 
 
 if __name__ == "__main__":
-    findDep("small_list.txt")
+    findDep("image_list.txt")
