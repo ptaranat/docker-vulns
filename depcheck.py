@@ -20,7 +20,7 @@ def findDep(filename):
                 sha = data["Layers"][-1]
                 image["sha256"] = sha
                 image["layers"] = data["Layers"][:-1]
-                image["dependency"] = ""
+                image["dependency"] = []
                 images.append(image)
             except:
                 pass
@@ -32,14 +32,27 @@ def findDep(filename):
                     item_name = item["name"]
                     base_name = base["name"]
                     # print(f"{item_name} depends on {base_name}")
-                    item["dependency"] = base_name
-
-    # print images that have dependencies
+                    item["dependency"].append(base_name)
+    
+    jsondata = {}
+    jsondata["images"] = []
     for item in images:
-        dep = item["dependency"]
-        if dep:
-            item_name = item["name"]
-            print(f"{item_name} dependson {dep}")
+        jsondata["images"].append({
+            "name": item["name"],
+            "sha256": item["sha256"],
+            "layers": item["layers"],
+            "dependency": item["dependency"],
+        })
+
+    with open("skopeo-data.json", "w") as outfile:
+        json.dump(jsondata, outfile)
+
+    # # print images that have dependencies
+    # for item in images:
+    #     dep = item["dependency"]
+    #     if dep:
+    #         item_name = item["name"]
+    #         print(f"{item_name} dependson {dep}")
 
 
 if __name__ == "__main__":
