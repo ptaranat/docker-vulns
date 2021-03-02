@@ -1,0 +1,51 @@
+FATA[0000] Error parsing image name "docker://docker.io/library/elasticsearch": Error reading manifest latest in docker.io/library/elasticsearch: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/kibana": Error reading manifest latest in docker.io/library/kibana: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/notary": Error reading manifest latest in docker.io/library/notary: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/jenkins": Error reading manifest latest in docker.io/library/jenkins: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/oraclelinux": Error reading manifest latest in docker.io/library/oraclelinux: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/logstash": Error reading manifest latest in docker.io/library/logstash: manifest unknown: manifest unknown
+FATA[0000] Error parsing manifest for image: Error choosing image instance: no image found in manifest list for architecture amd64, variant "", OS linux
+FATA[0000] Error parsing image name "docker://docker.io/library/scratch": Error reading manifest latest in docker.io/library/scratch: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/docker-dev": Error reading manifest latest in docker.io/library/docker-dev: manifest unknown: manifest unknown
+FATA[0000] Error parsing image name "docker://docker.io/library/opensuse": Error reading manifest latest in docker.io/library/opensuse: manifest unknown: manifest unknown
+geonetwork dependson debian,
+adoptopenjdk dependson ubuntu,
+amazoncorretto dependson amazonlinux,
+rust dependson debian, buildpack-deps,
+haxe dependson debian,
+websphere-liberty dependson ibmjava,
+hipache dependson ubuntu-upstart, ubuntu-debootstrap,
+haskell dependson debian,
+maven dependson openjdk,
+sapmachine dependson ubuntu,
+influxdb dependson debian,
+gazebo dependson ubuntu,
+golang dependson debian,
+gradle dependson ubuntu,
+elixir dependson erlang, debian, buildpack-deps,
+telegraf dependson debian,
+ubuntu-upstart dependson hipache, ubuntu-debootstrap,
+silverpeas dependson ubuntu,
+jetty dependson openjdk,
+mariadb dependson ubuntu,
+xwiki dependson ubuntu,
+ruby dependson debian, buildpack-deps,
+python dependson debian, buildpack-deps,
+erlang dependson debian, buildpack-deps,
+percona dependson centos,
+jruby dependson debian,
+open-liberty dependson ubuntu,
+solr dependson debian,
+rakudo-star dependson debian,
+cassandra dependson ubuntu,
+perl dependson debian, buildpack-deps,
+adminer dependson alpine,
+composer dependson alpine,
+gcc dependson debian, buildpack-deps,
+tomcat dependson debian,
+pypy dependson debian, buildpack-deps,
+buildpack-deps dependson debian,
+neurodebian dependson debian,
+docker dependson alpine,
+convertigo dependson debian, tomcat,
+ros dependson ubuntu,
