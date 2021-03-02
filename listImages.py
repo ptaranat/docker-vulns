@@ -1,3 +1,4 @@
+#finds names of all the official docker images and outputs them to a file
 import os
 
 
