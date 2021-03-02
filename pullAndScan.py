@@ -25,7 +25,6 @@ def pullImages():
                 if(exit_code != 0):
                     cprint("Failed to pull: " + images[i], 'grey', 'on_red')
                     failed_file.write("failed to pull image: " + images[i] + "\n")
-                    failure = 1   
                 
                 #scan the image
                 cprint("Scanning: " + images[i], 'grey', 'on_blue')
@@ -40,7 +39,6 @@ def pullImages():
                 if(exit_code != 0):
                     cprint("Failed to remove: " + images[i], 'grey', 'on_red')
                     failed_file.write("failed to remove image: " + images[i] + "\n")
-                    failure = 1
             except:
                 cprint("Exception on: " + images[i], 'grey', 'on_red')
                 failed_file.write("Exception on: " + images[i] + "\n")
