@@ -17,29 +17,34 @@ def pullImages():
         HR_scan_results_file = open("HR_scan_results.out", "w")
         images = file.read().split()
         results = {}
-        for i in range(0,81):
-            #pull the image
-            cprint("Pulling: " + images[i], 'grey', 'on_blue')
-            exit_code = os.system("docker pull " + images[i])
-            if(exit_code != 0):
-                cprint("Failed to pull: " + images[i], 'grey', 'on_red')
-                failed_file.write("failed to pull image: " + images[i] + "\n")
-                failure = 1   
-            
-            #scan the image
-            cprint("Scanning: " + images[i], 'grey', 'on_blue')
-            data = os.popen(
-                "grype " + images[i] +" -o json").read()
-            results[images[i]] = json.loads(data)
-            
+        for i in range(0,50):
+            try:
+                #pull the image
+                cprint("Pulling: " + images[i], 'grey', 'on_blue')
+                exit_code = os.system("docker pull " + images[i])
+                if(exit_code != 0):
+                    cprint("Failed to pull: " + images[i], 'grey', 'on_red')
+                    failed_file.write("failed to pull image: " + images[i] + "\n")
+                    failure = 1   
+                
+                #scan the image
+                cprint("Scanning: " + images[i], 'grey', 'on_blue')
+                data = os.popen(
+                    "grype " + images[i] +" -o json").read()
+                results[images[i]] = json.loads(data)
+                
 
-            #remove the image
-            cprint("Removing: " + images[i], 'grey', 'on_blue')
-            exit_code = os.system("docker rmi " + images[i] + " -f")
-            if(exit_code != 0):
-                cprint("Failed to remove: " + images[i], 'grey', 'on_red')
-                failed_file.write("failed to remove image: " + images[i] + "\n")
-                failure = 1
+                #remove the image
+                cprint("Removing: " + images[i], 'grey', 'on_blue')
+                exit_code = os.system("docker rmi " + images[i] + " -f")
+                if(exit_code != 0):
+                    cprint("Failed to remove: " + images[i], 'grey', 'on_red')
+                    failed_file.write("failed to remove image: " + images[i] + "\n")
+                    failure = 1
+            except:
+                cprint("Exception on: " + images[i], 'grey', 'on_red')
+                failed_file.write("Exception on: " + images[i] + "\n")
+                pass
             
             # check success
             # if(not failure):
@@ -50,7 +55,6 @@ def pullImages():
         HR_scan_results_file.write(json.dumps(results, indent=1))
         file.close()
         failed_file.close()
-        success_file.close()
         scan_results_file.close()
         HR_scan_results_file.close()
 
