@@ -26,14 +26,56 @@ def crossCheck(data):
                     break
             #we've gone through every dependency, comparing child to dependency
             if(not found):
-                found = 0
                 data[child]["cves"][cve]["pun"] = "new"
-    for child in range(0, len(data)):
-        for cve in range(0, len(data[child]['cves'])):
-            if(data[child]["cves"][cve]["pun"] == "null"):
-                data[child]["cves"][cve]["pun"] = "patched"
+            else:
+                found = 0
+
+    found = 0
+    for child in data:
+        for dependency in child["dependencies"]:
+            for cve in dependency['cves']:
+                cve["pun"] = "null"
+                curr_cve_id = cve["id"]
+                for child_cve in child["cves"]:
+                    if(child_cve["id"] == curr_cve_id):
+                        found = 1
+                        break
+                if(found):
+                    cve["pun"] = "patched"
+                    found = 0
     
-    with open("./extracted_v2.json", "w") as f:
+    with open("./extracted_v3.json", "w") as f:
+        f.write(json.dumps(data, indent=1))
+            
+
+
+
+
+    for child in range(0, len(data)):
+        #for each CVE in child image
+        for cve in range(0, len(data[child]['cves'])):
+            curr_cve_id = data[child]["cves"][cve]["id"]
+            data[child]["cves"][cve]["pun"] = "null"
+            #check each dependency to look for cve
+            for dependency in range(0,len(data[child]["dependencies"])):
+                #check each cve in the curr dependency
+                for i in range(0, len(data[child]["dependencies"][dependency]['cves'])):
+                    parent_cve_id = data[child]["dependencies"][dependency]['cves'][i]['id']
+                    if (parent_cve_id == curr_cve_id):
+                        #we found it in parent and the child, mark in child as unpatched
+                        data[child]["cves"][cve]["pun"] = "unpatched"
+                        found = 1
+                        break
+                if(found):
+                    break
+            #we've gone through every dependency, comparing child to dependency
+            if(not found):
+                data[child]["cves"][cve]["pun"] = "new"
+            else:
+                found = 0
+    
+    
+    with open("./extracted_v3.json", "w") as f:
         f.write(json.dumps(data, indent=1))
         
 
