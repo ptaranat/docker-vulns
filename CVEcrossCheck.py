@@ -40,8 +40,9 @@ def crossCheck(data):
                     if(child_cve["id"] == curr_cve_id):
                         found = 1
                         break
-                if(found):
+                if(not found):
                     cve["pun"] = "patched"
+                else:
                     found = 0
     
     with open("./extracted_v3.json", "w") as f:
