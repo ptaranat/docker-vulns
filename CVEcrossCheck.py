@@ -3,6 +3,45 @@ import json
 from jsonslicer import JsonSlicer
 
 
+
+def crossCheck(data):
+    found = 0
+    #for each child image
+    for child in range(0, len(data)):
+        #for each CVE in child image
+        for cve in range(0, len(data[child]['cves'])):
+            curr_cve_id = data[child]["cves"][cve]["id"]
+            data[child]["cves"][cve]["pun"] = "null"
+            #check each dependency to look for cve
+            for dependency in range(0,len(data[child]["dependencies"])):
+                #check each cve in the curr dependency
+                for i in range(0, len(data[child]["dependencies"][dependency]['cves'])):
+                    parent_cve_id = data[child]["dependencies"][dependency]['cves'][i]['id']
+                    if (parent_cve_id == curr_cve_id):
+                        #we found it in parent and the child, mark in child as unpatched
+                        data[child]["cves"][cve]["pun"] = "unpatched"
+                        found = 1
+                        break
+                if(found):
+                    break
+            #we've gone through every dependency, comparing child to dependency
+            if(not found):
+                found = 0
+                data[child]["cves"][cve]["pun"] = "new"
+    for child in range(0, len(data)):
+        for cve in range(0, len(data[child]['cves'])):
+            if(data[child]["cves"][cve]["pun"] == "null"):
+                data[child]["cves"][cve]["pun"] = "patched"
+    
+    with open("./extracted_v2.json", "w") as f:
+        f.write(json.dumps(data, indent=1))
+        
+
+
+
+
+
+
 def generateData():
     with open("./outputs/scan_results.json") as f:
         cve_json = json.load(f)
@@ -50,17 +89,17 @@ def generateData():
                 cve["severity"] = cve_json[image_name]["matches"][k]['vulnerability']['severity']
                 cve["artifact"] = cve_json[image_name]["matches"][k]['artifact']['name']
                 cves.append(cve)
-            
             #! Cross reference here and output data
-            image["cves"] = cves
             image["name"] = image_name
+            image["cves"] = cves
             image["dependencies"] = dependencies
             # image["patched"] =
             # image["unpatched"] =
             # image["new"] =
             images.append(image)
+        
+    crossCheck(images)
 
-    print(json.dumps(images, indent=1))
     # print(len(images))
 
     #
